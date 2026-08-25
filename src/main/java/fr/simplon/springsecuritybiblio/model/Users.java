@@ -6,27 +6,21 @@ import lombok.Data;
 import java.util.UUID;
 
 @Entity
-@Table(name = "book")
+@Table(name = "users")
 @Data
-public class Book {
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(nullable = false)
-    private String title;
+    private String name;
 
     @Column(nullable = false)
-    private String author;
+    private String email;
 
     @Column(nullable = false)
-    private String category;
-
-    @Column(nullable = false)
-    private Integer yearPublished;
-
-    @Column(nullable = false)
-    private Integer exemplaryNumber;
+    private String password;
 
 }
