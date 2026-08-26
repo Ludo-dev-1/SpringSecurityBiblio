@@ -1,25 +1,54 @@
 package fr.simplon.springsecuritybiblio.service;
 
 import fr.simplon.springsecuritybiblio.model.Book;
-import fr.simplon.springsecuritybiblio.repository.Bookrepository;
+import fr.simplon.springsecuritybiblio.repository.BookRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
 public class BookService {
 
-    private final Bookrepository bookrepositoryInjected;
+    private final BookRepository bookRepositoryInjected;
 
-    public BookService(Bookrepository bookrepositoryInjected) {
-        this.bookrepositoryInjected = bookrepositoryInjected;
+    public BookService(BookRepository bookRepositoryInjected) {
+        this.bookRepositoryInjected = bookRepositoryInjected;
     }
 
-    public List<Book> findAll() { return this.bookrepositoryInjected.findAll();}
-
-    public Book create(@RequestBody Book book) {
-        return this.bookrepositoryInjected.save(book);
+    public List<Book> findAll() {
+        return bookRepositoryInjected.findAll();
     }
+
+    public Book create(Book book) {
+        return bookRepositoryInjected.save(book);
+    }
+
+    public Optional<Book> findById(UUID id) {
+        return bookRepositoryInjected.findById(id);
+    }
+
+    public Book update(UUID id, Book bookUpdated) {
+
+        Optional<Book> existingBook = bookRepositoryInjected.findById(id);
+
+        if (existingBook.isEmpty()) {
+            return null;
+        }
+
+        Book book = existingBook.get();
+        book.setTitle(bookUpdated.getTitle());
+        book.setAuthor(bookUpdated.getAuthor());
+        book.setYearPublished(bookUpdated.getYearPublished());
+
+        return bookRepositoryInjected.save(book);
+    }
+
+    public void delete(UUID id) {
+        bookRepositoryInjected.deleteById(id);
+    }
+
+
 }

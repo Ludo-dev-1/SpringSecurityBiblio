@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsersService {
 
-    private final UsersRepository usersRepositoryinjected;
+    private final UsersRepository usersRepositoryInjected;
 
-    public UsersService(UsersRepository usersRepositoryinjected) {
-        this.usersRepositoryinjected = usersRepositoryinjected;
+    public UsersService(UsersRepository usersRepositoryInjected) {
+        this.usersRepositoryInjected = usersRepositoryInjected;
     }
 }

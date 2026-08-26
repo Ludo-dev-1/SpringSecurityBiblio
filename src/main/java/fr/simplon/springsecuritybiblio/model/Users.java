@@ -1,25 +1,31 @@
 package fr.simplon.springsecuritybiblio.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
 public class Users {
 
     @Id
+    @NonNull
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @NonNull
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @NonNull
+    @Column(nullable = false, unique = true)
     private String email;
 
+    @NonNull
     @Column(nullable = false)
     private String password;
 

@@ -2,10 +2,14 @@ package fr.simplon.springsecuritybiblio.controller;
 
 import fr.simplon.springsecuritybiblio.model.Book;
 import fr.simplon.springsecuritybiblio.service.BookService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/books")
@@ -18,9 +22,34 @@ public class BookController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Book>> getAllBooks() {return ResponseEntity.ok(bookServiceInjected.findAll());}
 
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Optional<Book>> getById(@PathVariable UUID id) {
+        return ResponseEntity.ok(bookServiceInjected.findById(id));
+    }
+
     @PostMapping
+    @ResponseStatus(HttpStatus.OK)
     public Book save(@RequestBody Book book) {return bookServiceInjected.create(book);}
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Book update(@PathVariable UUID id, @RequestBody Book book) {
+        Book bookUpdated = this.bookServiceInjected.update(id, book);
+        if(bookUpdated == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
+        }
+        return bookUpdated;
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteById(@PathVariable UUID id) {
+        bookServiceInjected.delete(id);
+    }
 
 }
