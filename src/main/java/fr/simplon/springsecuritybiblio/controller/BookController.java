@@ -36,7 +36,7 @@ public class BookController {
 
     @PreAuthorize("hasAuthority ('SCOPE_ROLE_ADMIN')")
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public Book save(@RequestBody Book book) {return bookServiceInjected.create(book);}
 
     @PreAuthorize("hasAuthority ('SCOPE_ROLE_ADMIN')")
