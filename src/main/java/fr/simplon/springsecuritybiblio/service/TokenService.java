@@ -6,7 +6,7 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
-/*import org.springframework.security.oauth2.jwt.JwtEncoder;*/
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
@@ -22,7 +22,7 @@ public class TokenService {
     public String generateToken(Authentication auth) {
         // crée l'en-tête
         JwsHeader header = JwsHeader.with(() -> "HS256").build();
-
+        System.out.println("Authorities: " + auth.getAuthorities());
         String scope = auth.getAuthorities().stream()
                 .map((authority) -> authority.getAuthority())
                 .collect(Collectors.joining(" ")); // ex: "ROLE_USER ROLE_ADMIN"

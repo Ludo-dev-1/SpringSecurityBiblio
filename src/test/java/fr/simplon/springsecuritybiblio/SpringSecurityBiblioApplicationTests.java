@@ -130,7 +130,7 @@ class SpringSecurityBiblioApplicationTests {
                         .contentType(String.valueOf(MediaType.APPLICATION_JSON))
                         .content(identifiant))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
         Users user = usersRepository.findByEmail(uuid + "@email.fr")
                 .orElse(null);
 

@@ -1,4 +1,4 @@
 package fr.simplon.springsecuritybiblio.dto;
 
-public record LoginDto( String token, String email) {
+public record LoginDto(String token, String email, String role) {
 }

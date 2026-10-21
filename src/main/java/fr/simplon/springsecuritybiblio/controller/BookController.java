@@ -1,5 +1,6 @@
 package fr.simplon.springsecuritybiblio.controller;
 
+import fr.simplon.springsecuritybiblio.dto.BookDto;
 import fr.simplon.springsecuritybiblio.model.Book;
 import fr.simplon.springsecuritybiblio.service.BookService;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,9 @@ public class BookController {
     @PreAuthorize("hasAuthority ('SCOPE_ROLE_USER')")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<Book>> getAllBooks() {return ResponseEntity.ok(bookServiceInjected.findAll());}
+    public ResponseEntity<List<Book>> getAllBooks() {
+        return ResponseEntity.ok(bookServiceInjected.findAll());
+    }
 
     @PreAuthorize("hasAuthority ('SCOPE_ROLE_USER')")
     @GetMapping("/{id}")
@@ -37,21 +40,44 @@ public class BookController {
     @PreAuthorize("hasAuthority ('SCOPE_ROLE_ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Book save(@RequestBody Book book) {return bookServiceInjected.create(book);}
+    public Book save(@RequestBody Book book) {
+        return bookServiceInjected.create(book);
+    }
 
-    @PreAuthorize("hasAuthority ('SCOPE_ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Book update(@PathVariable UUID id, @RequestBody Book book) {
-        Book bookUpdated = this.bookServiceInjected.update(id, book);
-        if(bookUpdated == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
+    public BookDto update(
+            @PathVariable UUID id,
+            @RequestBody BookDto dto) {
+
+        Book book = new Book();
+        book.setTitle(dto.title());
+        book.setAuthor(dto.author());
+        book.setCategory(dto.category());
+        book.setYearPublished(dto.yearPublished());
+        book.setExemplaryNumber(dto.exemplaryNumber());
+
+        Book bookUpdated = bookServiceInjected.update(id, book);
+
+        if (bookUpdated == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Book not found"
+            );
         }
-        return bookUpdated;
+
+        return new BookDto(
+                bookUpdated.getTitle(),
+                bookUpdated.getAuthor(),
+                bookUpdated.getCategory(),
+                bookUpdated.getYearPublished(),
+                bookUpdated.getExemplaryNumber()
+        );
     }
 
     @PreAuthorize("hasAuthority ('SCOPE_ROLE_ADMIN')")
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteById(@PathVariable UUID id) {
         bookServiceInjected.delete(id);

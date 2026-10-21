@@ -1,5 +1,6 @@
 package fr.simplon.springsecuritybiblio.service;
 
+import fr.simplon.springsecuritybiblio.model.Users;
 import fr.simplon.springsecuritybiblio.repository.UsersRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,10 +17,17 @@ public class UsersService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email)
+            throws UsernameNotFoundException {
 
-        return this.usersRepositoryInjected.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username " + email));
+        Users user = this.usersRepositoryInjected.findByEmail(email)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException(
+                                "User not found with username " + email));
 
+        System.out.println("USER : " + user.getEmail());
+        System.out.println("ROLES : " + user.getAuthorities());
+
+        return user;
     }
 }
